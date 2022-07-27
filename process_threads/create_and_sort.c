@@ -10,9 +10,17 @@
 
 
 int main(int argc, char *argv[], char *envp[]){
+    int retval = fork();
     srand(time(NULL));
     FILE *file;
     int pid = getpid();
+
+    if (retval == 0){
+        wait(5);
+        execve("./integer_sorter", NULL, NULL);
+        perror("Erro");
+    }
+    
     printf("Ola, eu sou o pid: %d. Estou inserindo os inteiros no arquivo...", pid);    
 
     file = fopen("integers.txt", "w");
@@ -22,8 +30,5 @@ int main(int argc, char *argv[], char *envp[]){
         fprintf(file, "%d\n", r);
     }
     fclose(file);
-    
-    execve("./integer_sorter", NULL, NULL);
-    perror("Erro");
     return 0;
 }
